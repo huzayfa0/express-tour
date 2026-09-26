@@ -1,0 +1,31 @@
+import os
+from typing import List, Optional
+from dotenv import load_dotenv
+
+load_dotenv()
+
+class Config:
+    BOT_TOKEN: str = os.getenv("BOT_TOKEN", "YOUR_BOT_TOKEN_HERE")
+    ADMIN_GROUP_ID: int = int(os.getenv("ADMIN_GROUP_ID", "0"))
+    
+    # Comma-separated admin IDs
+    _super_admins_raw: str = os.getenv("SUPER_ADMIN_IDS", "")
+    SUPER_ADMIN_IDS: List[int] = [
+        int(x.strip()) for x in _super_admins_raw.split(",") if x.strip().isdigit()
+    ]
+    
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///express_tour.db")
+    REDIS_URL: Optional[str] = os.getenv("REDIS_URL")
+    
+    # Company info
+    COMPANY_NAME: str = os.getenv("COMPANY_NAME", "Express Tour")
+    COMPANY_PHONE: str = os.getenv("COMPANY_PHONE", "+998 90 123 45 67")
+    COMPANY_TELEGRAM: str = os.getenv("COMPANY_TELEGRAM", "@express_tour_admin")
+    COMPANY_INSTAGRAM: str = os.getenv("COMPANY_INSTAGRAM", "@express_tour_uz")
+    COMPANY_ADDRESS: str = os.getenv("COMPANY_ADDRESS", "Toshkent shahri, Amir Temur ko'chasi, 12-uy")
+    COMPANY_WORK_HOURS: str = os.getenv("COMPANY_WORK_HOURS", "Dushanba - Shanba: 09:00 - 19:00")
+    COMPANY_LAT: float = float(os.getenv("COMPANY_LAT", "41.311081"))
+    COMPANY_LON: float = float(os.getenv("COMPANY_LON", "69.279737"))
+    GOOGLE_MAPS_URL: str = os.getenv("GOOGLE_MAPS_URL", "https://maps.google.com/?q=41.311081,69.279737")
+
+config = Config()
