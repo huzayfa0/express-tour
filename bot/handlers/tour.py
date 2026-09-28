@@ -131,13 +131,13 @@ async def process_tour_name(message: Message, state: FSMContext):
     await message.answer(
         f"Rahmat, <b>{name}</b>!\n\n"
         "Siz bilan bog'lanishimiz uchun telefon raqamingizni yuboring.\n"
-        "«📱 Raqamimni yuborish» tugmasini bosing yoki <code>+998901234567</code> formatida yozing:",
+        "Iltimos, pastdagi <b>«📱 Raqamimni yuborish»</b> tugmasini bosing:",
         parse_mode="HTML",
         reply_markup=get_phone_keyboard()
     )
 
 
-# 7. Telefon va Yakun
+# 7. Telefon va Yakun (Faqat kontakt ulashish orqali)
 @router.message(TourStates.phone, F.contact)
 async def process_tour_phone_contact(message: Message, state: FSMContext, bot: Bot, user_source: str = "direct"):
     phone = clean_phone_number(message.contact.phone_number)
@@ -145,13 +145,13 @@ async def process_tour_phone_contact(message: Message, state: FSMContext, bot: B
 
 
 @router.message(TourStates.phone, F.text)
-async def process_tour_phone_text(message: Message, state: FSMContext, bot: Bot, user_source: str = "direct"):
-    raw_phone = message.text.strip()
-    if not is_valid_phone(raw_phone):
-        await message.answer("⚠️ Noto'g'ri telefon raqami kiritildi. Iltimos, <code>+998901234567</code> formatida yozing:", parse_mode="HTML")
-        return
-    phone = clean_phone_number(raw_phone)
-    await finish_tour_booking(message, state, phone, bot, user_source)
+async def process_tour_phone_text(message: Message, state: FSMContext):
+    await message.answer(
+        "⚠️ <b>Telefon raqamini qo'lda kiritish mumkin emas!</b>\n\n"
+        "Haqiqiy raqamingizni tasdiqlash uchun, iltimos, pastdagi <b>«📱 Raqamimni yuborish»</b> tugmasini bosing 👇",
+        parse_mode="HTML",
+        reply_markup=get_phone_keyboard()
+    )
 
 
 async def finish_tour_booking(message: Message, state: FSMContext, phone: str, bot: Bot, user_source: str):

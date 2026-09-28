@@ -162,13 +162,13 @@ async def process_visa_name(message: Message, state: FSMContext):
     await message.answer(
         f"Rahmat, <b>{name}</b>!\n\n"
         "6-qadam: Siz bilan bog'lanishimiz uchun telefon raqamingizni yuboring.\n"
-        "«📱 Raqamimni yuborish» tugmasini bosing yoki <code>+998901234567</code> formatida yozing:",
+        "Iltimos, pastdagi <b>«📱 Raqamimni yuborish»</b> tugmasini bosing:",
         parse_mode="HTML",
         reply_markup=get_phone_keyboard()
     )
 
 
-# 6-qadam: Telefon (Contact or Text)
+# 6-qadam: Telefon (Faqat kontakt ulashish orqali)
 @router.message(VisaStates.phone, F.contact)
 async def process_visa_phone_contact(message: Message, state: FSMContext):
     phone = clean_phone_number(message.contact.phone_number)
@@ -186,25 +186,11 @@ async def process_visa_phone_contact(message: Message, state: FSMContext):
 
 @router.message(VisaStates.phone, F.text)
 async def process_visa_phone_text(message: Message, state: FSMContext):
-    raw_phone = message.text.strip()
-    if not is_valid_phone(raw_phone):
-        await message.answer(
-            "⚠️ Noto'g'ri telefon raqami kiritildi.\n"
-            "Iltimos, «📱 Raqamimni yuborish» tugmasidan foydalaning yoki <code>+998901234567</code> formatida yozing:",
-            parse_mode="HTML"
-        )
-        return
-
-    phone = clean_phone_number(raw_phone)
-    await state.update_data(phone=phone)
-    await state.set_state(VisaStates.convenient_time)
     await message.answer(
-        "7-qadam: Konsultatsiya uchun qaysi vaqt oraliqida qo'ng'iroq qilishimiz qulay?",
-        reply_markup=ReplyKeyboardRemove()
-    )
-    await message.answer(
-        "Vaqt oralig'ini tanlang 👇",
-        reply_markup=get_convenient_time_keyboard()
+        "⚠️ <b>Telefon raqamini qo'lda kiritish mumkin emas!</b>\n\n"
+        "Haqiqiy raqamingizni tasdiqlash uchun, iltimos, pastdagi <b>«📱 Raqamimni yuborish»</b> tugmasini bosing 👇",
+        parse_mode="HTML",
+        reply_markup=get_phone_keyboard()
     )
 
 
