@@ -1,5 +1,8 @@
+import logging
 from datetime import datetime
 from aiogram import Router, F, Bot
+
+logger = logging.getLogger(__name__)
 from aiogram.filters import Command
 from aiogram.types import Message, CallbackQuery, ReplyKeyboardRemove
 from aiogram.fsm.context import FSMContext
@@ -247,5 +250,5 @@ async def process_study_convenient_time(callback: CallbackQuery, state: FSMConte
                 parse_mode="HTML",
                 reply_markup=get_admin_lead_keyboard(lead.id)
             )
-        except Exception:
-            pass
+        except Exception as e:
+            logger.error(f"Error sending study lead to admin group {config.ADMIN_GROUP_ID}: {e}")

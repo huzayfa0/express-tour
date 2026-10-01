@@ -29,3 +29,20 @@ class Config:
     GOOGLE_MAPS_URL: str = os.getenv("GOOGLE_MAPS_URL", "https://maps.app.goo.gl/cnQW2F6ANuaLQoj17")
 
 config = Config()
+
+def update_admin_group_id(group_id: int):
+    config.ADMIN_GROUP_ID = group_id
+    env_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+    if os.path.exists(env_file):
+        try:
+            with open(env_file, "r", encoding="utf-8") as f:
+                content = f.read()
+            import re
+            if re.search(r"^ADMIN_GROUP_ID=.*", content, flags=re.MULTILINE):
+                new_content = re.sub(r"^ADMIN_GROUP_ID=.*", f"ADMIN_GROUP_ID={group_id}", content, flags=re.MULTILINE)
+            else:
+                new_content = content + f"\nADMIN_GROUP_ID={group_id}\n"
+            with open(env_file, "w", encoding="utf-8") as f:
+                f.write(new_content)
+        except Exception:
+            pass

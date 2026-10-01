@@ -7,7 +7,7 @@ from aiogram.fsm.context import FSMContext
 from bot.states import AdminStates
 from bot.keyboards import get_admin_lead_keyboard, get_assign_manager_keyboard
 from database import crud
-from config import config
+from config import config, update_admin_group_id
 
 router = Router()
 
@@ -460,3 +460,96 @@ async def process_broadcast_send(message: Message, state: FSMContext, bot: Bot):
         f"Yetib bormadi (bloklagan): {fail_count} ta",
         parse_mode="HTML"
     )
+
+
+# --- /id VA /group_id BUYRUG'I ---
+@router.message(Command("id", "group_id", "myid"))
+async def cmd_get_id(message: Message):
+    chat_type = message.chat.type
+    chat_id = message.chat.id
+    user_id = message.from_user.id
+
+    if chat_type in ["group", "supergroup"]:
+        text = (
+            f"👥 <b>Guruh ma'lumotlari:</b>\n"
+            f"🏷️ <b>Guruh nomi:</b> {message.chat.title}\n"
+            f"🆔 <b>Guruh ID:</b> <code>{chat_id}</code>\n"
+            f"👤 <b>Sizning ID:</b> <code>{user_id}</code>\n\n"
+            f"📌 Ushbu guruhga bot arizalarini yo'naltirish uchun <code>/set_group</code> buyrug'ini yuboring."
+        )
+    else:
+        text = (
+            f"👤 <b>Foydalanuvchi ma'lumotlari:</b>\n"
+            f"🆔 <b>Sizning Telegram ID:</b> <code>{user_id}</code>\n"
+            f"💬 <b>Chat ID:</b> <code>{chat_id}</code>"
+        )
+    await message.reply(text, parse_mode="HTML")
+
+
+# --- /set_group GURUHNI ULASH BUYRUG'I ---
+@router.message(Command("set_group", "connect_group"))
+async def cmd_set_admin_group(message: Message, bot: Bot):
+    if message.chat.type not in ["group", "supergroup"]:
+        await message.reply("⚠️ Ushbu buyruqni arizalar kelishi kerak bo'lgan Telegram guruhida yuboring.")
+        return
+
+    # Super admin yoki guruh adminligi tekshiruvi
+    user_is_super = is_admin(message.from_user.id)
+    if not user_is_super:
+        try:
+            member = await bot.get_chat_member(message.chat.id, message.from_user.id)
+            if member.status not in ["creator", "administrator"]:
+                await message.reply("⛔ Ushbu amalni bajarish uchun siz guruh administratori yoki bot super admini bo'lishingiz kerak.")
+                return
+        except Exception:
+            await message.reply("⛔ Ruxsat tekshirishda xatolik yuz berdi.")
+            return
+
+    # Bot guruhda admin ekanligini tekshirish
+    try:
+        me = await bot.get_me()
+        bot_member = await bot.get_chat_member(message.chat.id, me.id)
+        if bot_member.status != "administrator":
+            await message.reply(
+                "⚠️ <b>Eslatma:</b> Bot guruhda xabarlarni to'sqinliksiz yuborishi uchun botni guruhga <b>ADMIN (administrator)</b> qilib tayinlashingiz shart!\n"
+                "Iltimos, guruh sozlamalaridan botga adminlik huquqini bering.",
+                parse_mode="HTML"
+            )
+    except Exception:
+        pass
+
+    update_admin_group_id(message.chat.id)
+
+    # Guruh komandalarini o'rnatishga urinish
+    try:
+        from bot.utils.commands import set_bot_commands
+        await set_bot_commands(bot)
+    except Exception:
+        pass
+
+    await message.reply(
+        f"✅ <b>Guruh muvaffaqiyatli ulandi!</b>\n\n"
+        f"🏷️ <b>Guruh nomi:</b> {message.chat.title}\n"
+        f"🆔 <b>Guruh ID:</b> <code>{message.chat.id}</code>\n\n"
+        f"📩 Endi mijozlar botdan qoldirgan barcha arizalar (Viza, O'qish, Tur, Konsultatsiya) to'g'ridan-to'g'ri ushbu guruhga keladi va menejerlar shu yerdan turib arizalarni qabul qilishi mumkin!",
+        parse_mode="HTML"
+    )
+
+
+# --- BOT GURUHGA QO'SHILGANDA SALOMLASHISH ---
+@router.message(F.new_chat_members)
+async def on_new_chat_members(message: Message, bot: Bot):
+    me = await bot.get_me()
+    for member in message.new_chat_members:
+        if member.id == me.id:
+            await message.answer(
+                f"👋 <b>Assalomu alaykum! {config.COMPANY_NAME} boti guruhga qo'shildi.</b>\n\n"
+                f"🆔 <b>Ushbu guruh ID si:</b> <code>{message.chat.id}</code>\n\n"
+                f"📌 <b>Arizalar shu guruhga kelishi uchun:</b>\n"
+                f"1️⃣ Botni ushbu guruhga <b>ADMIN</b> (administrator) qiling.\n"
+                f"2️⃣ Guruhda <code>/set_group</code> buyrug'ini yuboring.\n\n"
+                f"Shundan so'ng bot arizalarni qabul qilishga tayyor bo'ladi!",
+                parse_mode="HTML"
+            )
+            break
+
