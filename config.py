@@ -20,7 +20,7 @@ class Config:
     # Company info
     COMPANY_NAME: str = os.getenv("COMPANY_NAME", "Express Tour")
     COMPANY_PHONE: str = os.getenv("COMPANY_PHONE", "+998 90 988 41 11")
-    COMPANY_TELEGRAM: str = os.getenv("COMPANY_TELEGRAM", "@express_tour_admin")
+    COMPANY_TELEGRAM: str = os.getenv("COMPANY_TELEGRAM", "@expresstouradmin")
     COMPANY_INSTAGRAM: str = os.getenv("COMPANY_INSTAGRAM", "@express_tour_uz")
     COMPANY_ADDRESS: str = os.getenv("COMPANY_ADDRESS", "Ahmad Donish 1A, Yunusobod, Toshkent")
     COMPANY_WORK_HOURS: str = os.getenv("COMPANY_WORK_HOURS", "Dushanba - Shanba: 09:00 - 19:00")

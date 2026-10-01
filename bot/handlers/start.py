@@ -28,7 +28,8 @@ HELP_TEXT = (
     "📍 /contact — Ofisimiz manzili, telefon va lokatsiyasi\n"
     "❌ /cancel — Har qanday amaliyotni bekor qilish\n\n"
     f"📞 Aloqa: {config.COMPANY_PHONE}\n"
-    f"✈️ Telegram: {config.COMPANY_TELEGRAM}"
+    f"✈️ Telegram: {config.COMPANY_TELEGRAM}\n"
+    f"📸 Instagram: {config.COMPANY_INSTAGRAM}"
 )
 
 @router.message(CommandStart())

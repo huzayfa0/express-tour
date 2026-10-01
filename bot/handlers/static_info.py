@@ -17,13 +17,14 @@ async def show_contact_info(event: Message | CallbackQuery):
         f"🏢 <b>Manzil:</b> {config.COMPANY_ADDRESS}\n"
         f"🕒 <b>Ish vaqti:</b> {config.COMPANY_WORK_HOURS}\n"
         f"📞 <b>Telefon:</b> {config.COMPANY_PHONE}\n"
-        f"✈️ <b>Telegram:</b> {config.COMPANY_TELEGRAM}\n"
-        f"📸 <b>Instagram:</b> {config.COMPANY_INSTAGRAM}\n\n"
+        f"✈️ <b>Telegram:</b> <a href=\"https://t.me/{config.COMPANY_TELEGRAM.lstrip('@')}\">{config.COMPANY_TELEGRAM}</a>\n"
+        f"📸 <b>Instagram:</b> <a href=\"https://instagram.com/{config.COMPANY_INSTAGRAM.lstrip('@')}\">{config.COMPANY_INSTAGRAM}</a>\n\n"
         f"🗺️ <b>Google Xaritalar:</b> <a href=\"{config.GOOGLE_MAPS_URL}\">Xaritada ochish</a>"
     )
 
     kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="💬 Menejer bilan bog'lanish", url=f"https://t.me/{config.COMPANY_TELEGRAM.lstrip('@')}")],
+        [InlineKeyboardButton(text="💬 Telegram: @expresstouradmin", url=f"https://t.me/{config.COMPANY_TELEGRAM.lstrip('@')}")],
+        [InlineKeyboardButton(text="📸 Instagram: express_tour_uz", url=f"https://instagram.com/{config.COMPANY_INSTAGRAM.lstrip('@')}")],
         [InlineKeyboardButton(text="🗺️ Google Maps'da ko'rish", url=config.GOOGLE_MAPS_URL)],
         [InlineKeyboardButton(text="🏠 Asosiy menyu", callback_data="back_to_main")]
     ])
