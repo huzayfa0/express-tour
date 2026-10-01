@@ -24,8 +24,8 @@ class Config:
     COMPANY_INSTAGRAM: str = os.getenv("COMPANY_INSTAGRAM", "@express_tour_uz")
     COMPANY_ADDRESS: str = os.getenv("COMPANY_ADDRESS", "Ahmad Donish 1A, Yunusobod, Toshkent")
     COMPANY_WORK_HOURS: str = os.getenv("COMPANY_WORK_HOURS", "Dushanba - Shanba: 09:00 - 19:00")
-    COMPANY_LAT: float = float(os.getenv("COMPANY_LAT", "41.3533"))
-    COMPANY_LON: float = float(os.getenv("COMPANY_LON", "69.2882"))
-    GOOGLE_MAPS_URL: str = os.getenv("GOOGLE_MAPS_URL", "https://maps.google.com/?q=Ahmad+Donish+1A,+Yunusobod,+Toshkent")
+    COMPANY_LAT: float = float(os.getenv("COMPANY_LAT", "41.366437"))
+    COMPANY_LON: float = float(os.getenv("COMPANY_LON", "69.293671"))
+    GOOGLE_MAPS_URL: str = os.getenv("GOOGLE_MAPS_URL", "https://maps.google.com/?q=41.366437,69.293671")
 
 config = Config()

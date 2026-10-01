@@ -23,8 +23,8 @@ async def show_contact_info(event: Message | CallbackQuery):
     )
 
     kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="💬 Telegram: @expresstouradmin", url=f"https://t.me/{config.COMPANY_TELEGRAM.lstrip('@')}")],
-        [InlineKeyboardButton(text="📸 Instagram: express_tour_uz", url=f"https://instagram.com/{config.COMPANY_INSTAGRAM.lstrip('@')}")],
+        [InlineKeyboardButton(text=f"💬 Telegram: {config.COMPANY_TELEGRAM}", url=f"https://t.me/{config.COMPANY_TELEGRAM.lstrip('@')}")],
+        [InlineKeyboardButton(text=f"📸 Instagram: {config.COMPANY_INSTAGRAM.lstrip('@')}", url=f"https://instagram.com/{config.COMPANY_INSTAGRAM.lstrip('@')}")],
         [InlineKeyboardButton(text="🗺️ Google Maps'da ko'rish", url=config.GOOGLE_MAPS_URL)],
         [InlineKeyboardButton(text="🏠 Asosiy menyu", callback_data="back_to_main")]
     ])
@@ -32,6 +32,11 @@ async def show_contact_info(event: Message | CallbackQuery):
     if isinstance(event, CallbackQuery):
         await event.message.edit_text(text, parse_mode="HTML", reply_markup=kb, disable_web_page_preview=True)
         await event.answer()
+        if config.COMPANY_LAT and config.COMPANY_LON:
+            try:
+                await event.message.answer_location(latitude=config.COMPANY_LAT, longitude=config.COMPANY_LON)
+            except Exception:
+                pass
     else:
         await event.answer(text, parse_mode="HTML", reply_markup=kb, disable_web_page_preview=True)
         if config.COMPANY_LAT and config.COMPANY_LON:
