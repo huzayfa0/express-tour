@@ -51,37 +51,25 @@ async def show_contact_info(event: Message | CallbackQuery):
 @router.message(F.text == "⭐ Natijalarimiz")
 @router.callback_query(F.data == "menu_results")
 async def show_results(event: Message | CallbackQuery):
-    results = await crud.get_results(limit=5)
-    
-    if results:
-        text = "⭐ <b>Mijozlarimizning muvaffaqiyatli natijalari:</b>\n\n"
-        for r in results:
-            text += (
-                f"🎉 <b>{r.full_name}</b> | <b>{r.country} ({r.service})</b>\n"
-                f"💬 <i>\"{r.content}\"</i>\n"
-                f"──────────────\n"
-            )
-    else:
-        text = (
-            "⭐ <b>Muvaffaqiyatli keyslarimiz va natijalar:</b>\n\n"
-            "🎉 <b>Azizbek M.</b> — 🇬🇧 Buyuk Britaniya vizasi (Standard Visitor, 6 oy)\n"
-            "💬 <i>\"Hujjatlarimni sifatli tayyorlab, 3 haftada viza olishimga yordam berishdi!\"</i>\n\n"
-            "🎉 <b>Malika T.</b> — 🇺🇸 AQSh F-1 talaba vizasi (Webster University)\n"
-            "💬 <i>\"Intervyuga zo'r tayyorlashdi, barcha savollarga aniq javob berib vizani oldim!\"</i>\n\n"
-            "🎉 <b>Shohruh K.</b> — 🇪🇺 Shengen (Germaniya) vizasi\n"
-            "💬 <i>\"Avval bir marta otkaz bo'lgan edi, Express Tour orqali qayta topshirib ijobiy javob oldim.\"</i>"
-        )
+    insta_url = f"https://instagram.com/{config.COMPANY_INSTAGRAM.lstrip('@')}"
+    text = (
+        f"⭐ <b>«{config.COMPANY_NAME}» muvaffaqiyatli natijalari:</b>\n\n"
+        "Mijozlarimizning qo'lga kiritgan vizalari, nufuzli universitetlarga qabul xatlari, unutilmas sayohatlari va jonli video taassurotlari bilan rasmiy <b>Instagram</b> sahifamizda batafsil tanishishingiz mumkin!\n\n"
+        f"📸 <b>Instagram:</b> <a href=\"{insta_url}\">{config.COMPANY_INSTAGRAM}</a>\n\n"
+        "👇 Natijalarni ko'rish uchun quyidagi tugmani bosing:"
+    )
 
     kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="📸 Instagram'da natijalarni ko'rish", url=insta_url)],
         [InlineKeyboardButton(text="💬 Men ham viza olmoqchiman", callback_data="menu_visa")],
         [InlineKeyboardButton(text="🏠 Asosiy menyu", callback_data="back_to_main")]
     ])
 
     if isinstance(event, CallbackQuery):
-        await event.message.edit_text(text, parse_mode="HTML", reply_markup=kb)
+        await event.message.edit_text(text, parse_mode="HTML", reply_markup=kb, disable_web_page_preview=False)
         await event.answer()
     else:
-        await event.answer(text, parse_mode="HTML", reply_markup=kb)
+        await event.answer(text, parse_mode="HTML", reply_markup=kb, disable_web_page_preview=False)
 
 
 # --- FOYDALI MA'LUMOTLAR (FAQ) ---

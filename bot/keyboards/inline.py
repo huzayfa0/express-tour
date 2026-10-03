@@ -1,6 +1,7 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from typing import List, Optional
 from database.models import Tour, Manager
+from config import config
 
 def get_main_inline_keyboard() -> InlineKeyboardMarkup:
     keyboard = [
@@ -13,7 +14,7 @@ def get_main_inline_keyboard() -> InlineKeyboardMarkup:
             InlineKeyboardButton(text="💬 Bepul konsultatsiya", callback_data="menu_consult")
         ],
         [
-            InlineKeyboardButton(text="⭐ Natijalarimiz", callback_data="menu_results"),
+            InlineKeyboardButton(text="⭐ Natijalarimiz", url=f"https://instagram.com/{config.COMPANY_INSTAGRAM.lstrip('@')}"),
             InlineKeyboardButton(text="📚 Foydali ma'lumotlar", callback_data="menu_faq")
         ],
         [
