@@ -15,10 +15,9 @@ def get_main_inline_keyboard() -> InlineKeyboardMarkup:
         ],
         [
             InlineKeyboardButton(text="⭐ Natijalarimiz", url=f"https://instagram.com/{config.COMPANY_INSTAGRAM.lstrip('@')}"),
-            InlineKeyboardButton(text="📚 Foydali ma'lumotlar", callback_data="menu_faq")
+            InlineKeyboardButton(text="📋 Arizam holati", callback_data="menu_status")
         ],
         [
-            InlineKeyboardButton(text="📋 Arizam holati", callback_data="menu_status"),
             InlineKeyboardButton(text="📍 Manzil va aloqa", callback_data="menu_contact")
         ]
     ]

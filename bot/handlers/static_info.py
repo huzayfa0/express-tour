@@ -72,87 +72,9 @@ async def show_results(event: Message | CallbackQuery):
         await event.answer(text, parse_mode="HTML", reply_markup=kb, disable_web_page_preview=False)
 
 
-# --- FOYDALI MA'LUMOTLAR (FAQ) ---
-@router.message(Command("faq"))
-@router.message(F.text == "📚 Foydali ma'lumotlar")
+# --- ESKI FAQ SO'ROVLARI (Olib tashlangan) ---
 @router.callback_query(F.data == "menu_faq")
-async def show_faq_categories(event: Message | CallbackQuery):
-    text = (
-        "📚 <b>Foydali ma'lumotlar va ko'p beriladigan savollar:</b>\n\n"
-        "Qaysi davlat bo'yicha ma'lumot olmoqchisiz?"
-    )
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [
-            InlineKeyboardButton(text="🇬🇧 Britaniya", callback_data="faq_c_Britaniya"),
-            InlineKeyboardButton(text="🇺🇸 AQSh", callback_data="faq_c_AQSh")
-        ],
-        [
-            InlineKeyboardButton(text="🇪🇺 Shengen", callback_data="faq_c_Shengen"),
-            InlineKeyboardButton(text="🇨🇦 Kanada", callback_data="faq_c_Kanada")
-        ],
-        [
-            InlineKeyboardButton(text="❓ Umumiy savol-javoblar", callback_data="faq_c_Umumiy")
-        ],
-        [InlineKeyboardButton(text="🏠 Asosiy menyu", callback_data="back_to_main")]
-    ])
-
-    if isinstance(event, CallbackQuery):
-        await event.message.edit_text(text, parse_mode="HTML", reply_markup=kb)
-        await event.answer()
-    else:
-        await event.answer(text, parse_mode="HTML", reply_markup=kb)
-
-
 @router.callback_query(F.data.startswith("faq_c_"))
-async def show_faq_content(callback: CallbackQuery):
-    country = callback.data.replace("faq_c_", "")
-    faqs = await crud.get_faqs(country=country)
+async def handle_removed_faq(callback: CallbackQuery):
+    await callback.answer("Ushbu bo'lim olib tashlangan.", show_alert=True)
 
-    if faqs:
-        text = f"📚 <b>{country} bo'yicha ma'lumotlar:</b>\n\n"
-        for item in faqs:
-            text += f"🔹 <b>{item.topic}:</b>\n{item.content}\n\n"
-    else:
-        # Default helpful guides
-        if country == "Britaniya":
-            text = (
-                "🇬🇧 <b>Buyuk Britaniya vizasi bo'yicha ma'lumot:</b>\n\n"
-                "📌 <b>Asosiy talab qilinadigan hujjatlar:</b>\n"
-                "• Xorijga chiqish pasporti (kamida 6 oy amal qilish muddati bilan)\n"
-                "• Ish joyidan ma'lumotnoma va daromad haqida tasdiqnoma\n"
-                "• Bank hisob raqamidan ko'chirma (oxirgi 6 oy, yetarli mablag' bilan)\n"
-                "• Mulk va ko'chmas mulk hujjatlari (mavjud bo'lsa)\n\n"
-                "⏳ <b>Ko'rib chiqish muddati:</b> 15 ish kuni (tezlashtirilgan 5 kun)"
-            )
-        elif country == "AQSh":
-            text = (
-                "🇺🇸 <b>AQSh vizasi (B1/B2 va F1) bo'yicha ma'lumot:</b>\n\n"
-                "📌 <b>Asosiy bosqichlar:</b>\n"
-                "• DS-160 elektron anketasini xatosiz to'ldirish\n"
-                "• Konsullik yig'imini to'lash va intervyuga navbat olish\n"
-                "• Elchixonada konsul bilan suhbatdan muvaffaqiyatli o'tish\n\n"
-                "💡 <i>Eng muhim omil: Vatan bilan bog'liqlik (ish, oila, mulk) va safar maqsadining aniqligi.</i>"
-            )
-        elif country == "Shengen":
-            text = (
-                "🇪🇺 <b>Shengen vizasi bo'yicha ma'lumot:</b>\n\n"
-                "📌 <b>Asosiy talablar:</b>\n"
-                "• Asosiy qolish davlati elchixonasiga topshirish qoidasi\n"
-                "• Mehmonxona va aviachipta bronlari\n"
-                "• Xalqaro tibbiy sug'urta (30 000 yevro qoplamali)\n"
-                "• Moliyaviy ta'minlanganlik kafolati"
-            )
-        else:
-            text = (
-                f"🌍 <b>{country} vizasi bo'yicha ma'lumot:</b>\n\n"
-                "Viza talablari sizning safar maqsadingiz, ish faoliyatingiz va moliyaviy holatingizga qarab individual belgilanadi.\n\n"
-                "Aniq talablar va hujjatlar ro'yxatini bilish uchun mutaxassisimizdan bepul konsultatsiya oling."
-            )
-
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="💬 Bepul konsultatsiya olish", callback_data="menu_consult")],
-        [InlineKeyboardButton(text="🔙 Boshqa davlatlar", callback_data="menu_faq")],
-        [InlineKeyboardButton(text="🏠 Asosiy menyu", callback_data="back_to_main")]
-    ])
-    await callback.message.edit_text(text, parse_mode="HTML", reply_markup=kb)
-    await callback.answer()

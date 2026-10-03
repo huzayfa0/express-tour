@@ -24,8 +24,8 @@ def get_main_reply_keyboard() -> ReplyKeyboardMarkup:
     keyboard = [
         [KeyboardButton(text="🛂 Viza olish"), KeyboardButton(text="🎓 Xorijda o'qish")],
         [KeyboardButton(text="✈️ Tur paketlar"), KeyboardButton(text="💬 Bepul konsultatsiya")],
-        [KeyboardButton(text="⭐ Natijalarimiz"), KeyboardButton(text="📚 Foydali ma'lumotlar")],
-        [KeyboardButton(text="📋 Arizam holati"), KeyboardButton(text="📍 Manzil va aloqa")]
+        [KeyboardButton(text="⭐ Natijalarimiz"), KeyboardButton(text="📋 Arizam holati")],
+        [KeyboardButton(text="📍 Manzil va aloqa")]
     ]
     return ReplyKeyboardMarkup(
         keyboard=keyboard,
