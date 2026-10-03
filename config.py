@@ -27,6 +27,7 @@ class Config:
     COMPANY_LAT: float = float(os.getenv("COMPANY_LAT", "41.366488"))
     COMPANY_LON: float = float(os.getenv("COMPANY_LON", "69.293553"))
     GOOGLE_MAPS_URL: str = os.getenv("GOOGLE_MAPS_URL", "https://maps.app.goo.gl/cnQW2F6ANuaLQoj17")
+    COMPANY_WEBSITE: str = os.getenv("COMPANY_WEBSITE", "https://express-ielts.com")
 
 config = Config()
 
