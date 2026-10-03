@@ -401,3 +401,78 @@ async def add_result(
         await session.commit()
         await session.refresh(r)
         return r
+
+
+async def seed_initial_tours():
+    """Turlar jadvali bo'sh bo'lsa, standart qaynoq turlarni avtomatik kiritadi."""
+    async with AsyncSessionLocal() as session:
+        result = await session.execute(select(Tour).limit(1))
+        existing = result.scalars().first()
+        if existing:
+            return
+
+        initial_tours = [
+            Tour(
+                destination="Turkiya",
+                title="Antaliya — 5★ All Inclusive (7 kun)",
+                price_usd=420.0,
+                description="O'rta yer dengizi sohilida hashamatli 5 yulduzli hotel, ultra all-inclusive taomlar, bepul akvapark, jonli shoular va ajoyib qumli plyajda unutilmas hordiq!",
+                whats_included="✈️ Toshkent - Antaliya - Toshkent to'g'ridan-to'g'ri aviaparvoz\n🏨 5★ Hotelda 7 kecha / 8 kun turish\n🍽️ Kuniga 3 mahal ovqat + bar (Ultra All Inclusive)\n🚐 Aeroport - Hotel - Aeroport transferi\n🏥 Xalqaro tibbiy sug'urta",
+                slots_total=25,
+                slots_left=18,
+                is_active=True
+            ),
+            Tour(
+                destination="Turkiya",
+                title="Sehrli Istanbul — Tarix va Shopping (5 kun)",
+                price_usd=350.0,
+                description="Ayasofya, Sultonahmad masjidi, Topkapi saroyi, Bosfor bo'ylab kechki kema sayohati va Istanbulning eng mashhur savdo markazlarida shopping!",
+                whats_included="✈️ Borish-qaytish aviaparvozi\n🏨 4★ Qulay shahar markazidagi mehmonxona\n☕ Mazali turkcha nonushtalar\n🚢 Bosfor bo'ylab ekskursiya\n🚐 Barcha transferlar va sug'urta",
+                slots_total=20,
+                slots_left=12,
+                is_active=True
+            ),
+            Tour(
+                destination="Misr",
+                title="Sharm El-Sheikh — Qizil dengiz marjoni (7 kun)",
+                price_usd=460.0,
+                description="Dunyoning eng chiroyli Qizil dengiz marjon riflari, rang-barang baliqlar, sho'ng'ish (dayving), piramidalar va Sinay cho'li bo'ylab kvadrosikl sayohati!",
+                whats_included="✈️ To'g'ridan-to'g'ri aviareys\n🏨 5★ Resort mehmonxona (1-qator)\n🍹 All Inclusive (barcha taom va ichimliklar)\n🚐 Qulay transfer xizmati\n🏥 Tibbiy sug'urta va viza ko'magi",
+                slots_total=25,
+                slots_left=15,
+                is_active=True
+            ),
+            Tour(
+                destination="Dubai",
+                title="Yorqin Dubai — Zamonaviy shahar mo'jizasi (6 kun)",
+                price_usd=520.0,
+                description="Burj Khalifa minorasi, Dubai Mall musiqali favvoralari, Marina yaxta safari, cho'lda jip safari va kechki arabcha shou dasturi!",
+                whats_included="✈️ Toshkent - Dubai - Toshkent aviaparvozi\n🏨 4★ Zamonaviy shahar mehmonxonasi\n🍳 Nonushtalar (Buffet)\n🚙 Cho'l safari (Desert Safari) va kechki ovqat\n🚐 Barcha transferlar va sug'urta",
+                slots_total=20,
+                slots_left=14,
+                is_active=True
+            ),
+            Tour(
+                destination="Tailand",
+                title="Phuket oroli — Tropik jannat (8 kun)",
+                price_usd=750.0,
+                description="Moviy okean suvlari, oq qumli plyajlar, Phi-Phi orollari, James Bond oroli, tropik mevalar va ekzotik tabiat qo'ynida haqiqiy dam olish!",
+                whats_included="✈️ Xalqaro aviaparvoz\n🏨 4★ Plyaj bo'yidagi qulay resort hotel\n🥥 Ekzotik nonushtalar\n🚤 Orollar bo'ylab tezyurar kater safari\n🚐 Aeroport transferi va sug'urta",
+                slots_total=15,
+                slots_left=9,
+                is_active=True
+            ),
+            Tour(
+                destination="Yevropa",
+                title="Klassik Yevropa: Italiya, Fransiya, Chexiya (10 kun)",
+                price_usd=1250.0,
+                description="Rim kolizeyi, Venetsiya gondolalari, Parij Eyfel minorasi va Praga ko'chalari bo'ylab sayohat! Shengen vizasini olishga to'liq professional yordam.",
+                whats_included="✈️ Toshkent - Rim / Praga - Toshkent reyslari\n🏨 Shahar markazlaridagi 4★ mehmonxonalar\n🥐 Mazali nonushtalar\n🚅 Shaharlararo tezyurar poyezd chiptalari\n👨‍💼 Professional gid va Shengen vizasi hujjatlari",
+                slots_total=12,
+                slots_left=7,
+                is_active=True
+            )
+        ]
+        session.add_all(initial_tours)
+        await session.commit()
+

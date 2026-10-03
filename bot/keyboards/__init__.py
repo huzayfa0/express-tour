@@ -19,6 +19,8 @@ from .inline import (
     get_tour_destinations_keyboard,
     get_tours_list_keyboard,
     get_tour_detail_keyboard,
+    get_tour_people_keyboard,
+    get_cancel_inline_keyboard,
     get_consult_service_keyboard,
     get_admin_lead_keyboard,
     get_assign_manager_keyboard
@@ -43,6 +45,8 @@ __all__ = [
     "get_tour_destinations_keyboard",
     "get_tours_list_keyboard",
     "get_tour_detail_keyboard",
+    "get_tour_people_keyboard",
+    "get_cancel_inline_keyboard",
     "get_consult_service_keyboard",
     "get_admin_lead_keyboard",
     "get_assign_manager_keyboard"

@@ -186,6 +186,12 @@ def get_study_budget_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
 
+def get_cancel_inline_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="❌ Bekor qilish", callback_data="cancel_action")]
+    ])
+
+
 # --- TOUR KEYBOARDS ---
 def get_tour_destinations_keyboard() -> InlineKeyboardMarkup:
     keyboard = [
@@ -194,32 +200,62 @@ def get_tour_destinations_keyboard() -> InlineKeyboardMarkup:
             InlineKeyboardButton(text="🇪🇬 Misr", callback_data="tour_d_Misr")
         ],
         [
-            InlineKeyboardButton(text="🇹🇭 Tailand", callback_data="tour_d_Tailand"),
-            InlineKeyboardButton(text="🇦🇪 Dubai", callback_data="tour_d_Dubai")
+            InlineKeyboardButton(text="🇦🇪 Dubai (BAA)", callback_data="tour_d_Dubai"),
+            InlineKeyboardButton(text="🇹🇭 Tailand", callback_data="tour_d_Tailand")
         ],
         [
             InlineKeyboardButton(text="🇪🇺 Yevropa", callback_data="tour_d_Yevropa"),
-            InlineKeyboardButton(text="🌍 Boshqa", callback_data="tour_d_Boshqa")
+            InlineKeyboardButton(text="🔥 Barcha turlar", callback_data="tour_all")
         ],
-        [InlineKeyboardButton(text="❌ Bekor qilish", callback_data="cancel_action")]
+        [
+            InlineKeyboardButton(text="✍️ O'zimga mos tur so'rash", callback_data="tour_custom")
+        ],
+        [
+            InlineKeyboardButton(text="🏠 Asosiy menyu", callback_data="back_to_main"),
+            InlineKeyboardButton(text="❌ Bekor qilish", callback_data="cancel_action")
+        ]
     ]
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
 
-def get_tours_list_keyboard(tours: List[Tour]) -> InlineKeyboardMarkup:
+def get_tours_list_keyboard(tours: List[Tour], destination: Optional[str] = None) -> InlineKeyboardMarkup:
     keyboard = []
     for tour in tours:
         btn_text = f"✈️ {tour.title} (${tour.price_usd:,.0f})"
         keyboard.append([InlineKeyboardButton(text=btn_text, callback_data=f"tour_id_{tour.id}")])
-    keyboard.append([InlineKeyboardButton(text="💬 Menejer bilan bog'lanish", callback_data="menu_consult")])
-    keyboard.append([InlineKeyboardButton(text="🔙 Orqaga", callback_data="menu_tour")])
+    keyboard.append([InlineKeyboardButton(text="✍️ O'zimga mos tur so'rash", callback_data=f"tour_custom_{destination}" if destination else "tour_custom")])
+    keyboard.append([InlineKeyboardButton(text="💬 Mutaxassis bilan bog'lanish", callback_data="menu_consult")])
+    keyboard.append([
+        InlineKeyboardButton(text="🔙 Boshqa yo'nalishlar", callback_data="menu_tour"),
+        InlineKeyboardButton(text="🏠 Asosiy menyu", callback_data="back_to_main")
+    ])
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
 
-def get_tour_detail_keyboard(tour_id: int) -> InlineKeyboardMarkup:
+def get_tour_detail_keyboard(tour_id: int, destination: Optional[str] = None) -> InlineKeyboardMarkup:
+    back_cb = f"tour_d_{destination}" if destination else "menu_tour"
     keyboard = [
         [InlineKeyboardButton(text="📝 Ushbu turga ariza qoldirish", callback_data=f"book_tour_{tour_id}")],
-        [InlineKeyboardButton(text="🔙 Turlar ro'yxati", callback_data="menu_tour")]
+        [InlineKeyboardButton(text="💬 Mutaxassisdan konsultatsiya olish", callback_data="menu_consult")],
+        [
+            InlineKeyboardButton(text="🔙 Turlar ro'yxati", callback_data=back_cb),
+            InlineKeyboardButton(text="🏠 Asosiy menyu", callback_data="back_to_main")
+        ]
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+
+def get_tour_people_keyboard() -> InlineKeyboardMarkup:
+    keyboard = [
+        [
+            InlineKeyboardButton(text="👤 1 kishi", callback_data="tour_ppl_1 kishi"),
+            InlineKeyboardButton(text="👥 2 kishi (juftlik)", callback_data="tour_ppl_2 kishi")
+        ],
+        [
+            InlineKeyboardButton(text="👨‍👩‍👧 3-4 kishi (oila)", callback_data="tour_ppl_3-4 kishi"),
+            InlineKeyboardButton(text="👥 5+ kishi (katta guruh)", callback_data="tour_ppl_5+ kishi")
+        ],
+        [InlineKeyboardButton(text="❌ Bekor qilish", callback_data="cancel_action")]
     ]
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 

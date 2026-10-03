@@ -3,7 +3,7 @@ from aiogram.filters import Command
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 from bot.states import StatusCheckStates
-from bot.keyboards import get_back_to_menu_keyboard, get_cancel_keyboard
+from bot.keyboards import get_back_to_menu_keyboard, get_cancel_keyboard, get_cancel_inline_keyboard
 from database import crud
 
 router = Router()
@@ -69,7 +69,7 @@ async def start_status_check(event: Message | CallbackQuery, state: FSMContext):
         "(Masalan: <code>ET-1001</code> yoki shunchaki <code>1001</code>)"
     )
     if isinstance(event, CallbackQuery):
-        await event.message.edit_text(text=text, parse_mode="HTML", reply_markup=get_cancel_keyboard())
+        await event.message.edit_text(text=text, parse_mode="HTML", reply_markup=get_cancel_inline_keyboard())
         await event.answer()
     else:
         await event.answer(text=text, parse_mode="HTML", reply_markup=get_cancel_keyboard())

@@ -22,6 +22,8 @@ async def main():
     # 1. Initialize Database tables
     try:
         await init_db()
+        from database.crud import seed_initial_tours
+        await seed_initial_tours()
         logger.info("Database initialized successfully.")
     except Exception as e:
         logger.error(f"Failed to initialize database: {e}")

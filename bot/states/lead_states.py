@@ -24,7 +24,9 @@ class StudyStates(StatesGroup):
 
 class TourStates(StatesGroup):
     destination = State()
+    custom_destination = State()
     tour_select = State()
+    people_count = State()
     departure_date = State()
     name = State()
     phone = State()

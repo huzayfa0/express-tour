@@ -14,6 +14,7 @@ from bot.keyboards import (
     get_study_budget_keyboard,
     get_phone_keyboard,
     get_cancel_keyboard,
+    get_cancel_inline_keyboard,
     get_convenient_time_keyboard,
     get_main_inline_keyboard,
     get_main_reply_keyboard,
@@ -66,7 +67,7 @@ async def process_study_country(callback: CallbackQuery, state: FSMContext):
         await state.set_state(StudyStates.custom_country)
         await callback.message.edit_text(
             "🌍 Iltimos, o'qimoqchi bo'lgan davlatingiz nomini yozing:",
-            reply_markup=get_cancel_keyboard()
+            reply_markup=get_cancel_inline_keyboard()
         )
     else:
         await state.update_data(country=country)

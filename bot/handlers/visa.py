@@ -16,6 +16,7 @@ from bot.keyboards import (
     get_refusal_count_keyboard,
     get_phone_keyboard,
     get_cancel_keyboard,
+    get_cancel_inline_keyboard,
     get_convenient_time_keyboard,
     get_main_inline_keyboard,
     get_main_reply_keyboard,
@@ -66,7 +67,7 @@ async def process_visa_country(callback: CallbackQuery, state: FSMContext):
         await state.set_state(VisaStates.custom_country)
         await callback.message.edit_text(
             "🌍 Iltimos, bormoqchi bo'lgan davlatingiz nomini yozing:",
-            reply_markup=get_cancel_keyboard()
+            reply_markup=get_cancel_inline_keyboard()
         )
     else:
         await state.update_data(country=country)
